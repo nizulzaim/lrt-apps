@@ -5,8 +5,10 @@ import VueHead from 'vue-head';
 import VueHighlightJS from 'vue-highlight.js';
 import ViuUI from 'meteor/devsignstudio:viu-ui';
 import 'highlight.js/styles/monokai.css';
+import VueMoment from "vue-moment";
 
 Vue.use(VueHighlightJS);
+Vue.use(VueMoment);
 Vue.use(VueHead);
 Vue.use(ViuUI);
 Vue.config.debug = true;

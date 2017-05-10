@@ -1,5 +1,6 @@
 import {Class} from 'meteor/jagi:astronomy';
 import {Meteor} from "meteor/meteor";
+import {Station} from "./Station";
 
 export const UserProfile = Class.create({
     name: 'UserProfile',
@@ -7,7 +8,8 @@ export const UserProfile = Class.create({
         name: String,
         email: String,
         imageId: {type:String,optional: true},
-        telNo: String,
+        telNo: {type: String, optional: true},
+        stationId: {type: String, optional: true},
         userType: {
             type: [Number],
             default: [2],
@@ -20,7 +22,6 @@ export const User = Class.create({
     collection: Meteor.users,
     fields: {
         username: String,
-        password: String,
         profile: UserProfile,
     },
     behaviors: {
@@ -45,6 +46,12 @@ export const User = Class.create({
         },
         isCustomer() {
             return this.profile.userType.indexOf(2) > -1;
+        },
+        station() {
+            if (!this.profile.stationId) {
+                return undefined;
+            }
+            return Station.findOne(this.profile.stationId);
         }
     }
 });
@@ -56,21 +63,62 @@ if (Meteor.isServer) {
                 obj.profile = profile;
                 Accounts.createUser(obj);
             },
+            createStaff(obj) {
+                return Accounts.createUser({
+                    username: obj.username,
+                    password: obj.password,
+                    profile: {
+                        name: obj.name,
+                        email: obj.email,
+                        stationId: obj.stationId,
+                        userType: [1],
+                    }
+                });
+            },
+            update(obj) {
+                this.set(obj, {cast: true, merge: true});
+                this.save();
+            },
+            delete() {
+                return this.softRemove();
+            }
         }
     });
+
+    let children = [
+        {
+            find(u) {
+                if (u.stationId) {
+                    return Station.find(u.stationId);
+                }
+            }
+        }
+    ];
 
     Meteor.publishComposite('users', function() {
         return {
             find: function() {
                 return User.find();
             },
+            children,
         };
     });
+
+    Meteor.publishComposite('staffs', function() {
+        return {
+            find: function() {
+                return User.find({"profile.userType": [1]});
+            },
+            children,            
+        };
+    });
+
     Meteor.publishComposite('loginUser', function() {
         return {
             find: function() {
                 return User.find(this.userId);
             },
+            children,
         };
     });
 

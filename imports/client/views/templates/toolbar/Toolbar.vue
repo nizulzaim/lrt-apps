@@ -1,6 +1,6 @@
 <template>
     <span>
-        <app-bar :title="title" :fixed="true" background-color="theme" v-depth="1">
+        <app-bar :title="title" :fixed="true" background-color="theme" v-depth="depth">
             <div slot="left">
                 <icon-button name="menu" v-open v-ripple="{background: '#fff'}"></icon-button>
             </div>
@@ -26,6 +26,14 @@ export default {
             }
         },
     },
+    computed: {
+        depth() {
+            if (this.$route.meta.depth === undefined) {
+                return 1;
+            }
+            return this.$route.meta.depth;
+        }
+    },
     methods: {
         updateTitle() {
             if (this.$route) {
@@ -34,7 +42,7 @@ export default {
                     this.$emit('updateHead')
                 }
             }
-        }
+        },
     },
     watch: {
         value(newVal) {

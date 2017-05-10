@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div>
+    <div class="appbar-padding" v-wheight>
+        <page-container v-if="$subReady">
             <cards v-for="t in transactions">
                 <cards-content>
                     <span :class="'status status-'+ t.statusText()">{{t.statusText()}}</span>
@@ -28,9 +28,9 @@
                     </div>
                 </cards-content>
             </cards>
-        </div>
+        </page-container>
 
-        <reveal v-model="showReveal" style="">
+         <reveal v-model="showReveal">
             <div class="col-md-fluid-10" v-if="selectedTransaction">
                 <cards>
                     <cards-content>
@@ -38,7 +38,7 @@
                     </cards-content>
                     <divider></divider>
                     <cards-content-scrollbar>
-                        <img :src="imgSrc" alt="" style="width: 280px; max-width: 100%;">
+                       <img :src="imgSrc" alt="" style="width: 280px; max-width: 100%;">
                     </cards-content-scrollbar>
                     <divider></divider>
                     <cards-action class="cards-content">
@@ -68,7 +68,7 @@
         },
         meteor: {
             subscribe: {
-                transactions: [],
+                transactionsByUser: [],
             },
             transactions() {
                 return Transaction.find({}, {sort: {createdAt: -1}});

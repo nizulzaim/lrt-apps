@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div>
+    <div class="appbar-padding" v-wheight>
+        <page-container v-if="$subReady">
             <cards v-for="t in transactions">
                 <cards-content>
                     <span :class="'status status-'+ t.statusText()">{{t.statusText()}}</span>
@@ -17,7 +17,7 @@
                 <divider></divider>
                 <cards-action>
                     <div class="pull-right">
-                        <raised-button @click="selectId(t._id)" class="primary" :disabled="t.status !== 1" v-ripple>View Details</raised-button>
+                        <raised-button @click="selectId(t._id)" class="primary" :disabled="t.status !== 1" v-ripple>Activate</raised-button>
                     </div>
                 </cards-action>
             </cards>
@@ -28,27 +28,7 @@
                     </div>
                 </cards-content>
             </cards>
-        </div>
-
-        <reveal v-model="showReveal" style="">
-            <div class="col-md-fluid-10" v-if="selectedTransaction">
-                <cards>
-                    <cards-content>
-                        Status : <span :class="'status status-'+ selectedTransaction.statusText()">{{selectedTransaction.statusText()}}</span>
-                    </cards-content>
-                    <divider></divider>
-                    <cards-content-scrollbar>
-                        <img :src="imgSrc" alt="" style="width: 280px; max-width: 100%;">
-                    </cards-content-scrollbar>
-                    <divider></divider>
-                    <cards-action class="cards-content">
-                        <div class="pull-right">
-                            <color-button class="primary" @click="showReveal = false" v-ripple>OK</color-button>
-                        </div>
-                    </cards-action>
-                </cards>
-            </div>
-        </reveal>
+        </page-container>
     </div>
 </template>
 
@@ -56,6 +36,7 @@
     import {Price} from '/imports/model/Price.js';
     import {Station} from '/imports/model/Station.js';
     import {Transaction} from '/imports/model/Transaction.js';
+    import {User} from '/imports/model/User.js';
     import QRious from 'qrious';
 
     export default {
@@ -64,15 +45,26 @@
                 showReveal: false,
                 selectedId: "",
                 imgSrc: "",
+                userId:"",
             }
         },
         meteor: {
             subscribe: {
-                transactions: [],
+                transactionsByStation() {
+                    if (this.loginUser) {
+                        return [this.loginUser.profile.stationId, this.userId];
+                    }
+
+                    return [];
+                },
+                loginUser: [],
             },
             transactions() {
                 return Transaction.find({}, {sort: {createdAt: -1}});
             },
+            loginUser() {
+                return User.findOne(Meteor.userId());
+            }
         },
         computed: {
             selectedTransaction() {
@@ -94,13 +86,15 @@
             },
             selectId(id) {
                 this.selectedId = id;
-                const qr = new QRious({
-                    value: 'lrt-apps-id/' + this.selectedId,
-                    size: 500,
-                });
-                this.imgSrc = qr.toDataURL();
-
-                this.showReveal = true;
+                this.$confirmation.run("Are you sure you want to activate this account", ()=> {
+                    this.selectedTransaction.callMethod("activate", (err, reason)=> {
+                        if (err) {
+                            return this.$snackbar.run("Error activating this ticket: " + err.reason, ()=> {}, "OK", "error");
+                        }
+                        this.$snackbar.run("Succefully activate this ticket");
+                        return this.selectedId = "";
+                    })
+                })
             }
         }
     }

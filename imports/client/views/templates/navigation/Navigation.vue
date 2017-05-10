@@ -10,9 +10,9 @@
                 <icon name="ticket"></icon> Tickets
             </nav-list>
         </router-link>
-        <router-link to="/dashboard/available-tickets" exact v-if="loginUser && loginUser.isCustomer()">
+        <router-link to="/dashboard/all-tickets" exact v-if="loginUser && loginUser.isCustomer()">
             <nav-list class="nav-item">
-                <icon name="ticket"></icon> Available Tickets
+                <icon name="ticket"></icon> All Tickets
             </nav-list>
         </router-link>
         <router-link to="/dashboard/stations" exact  v-if="loginUser && loginUser.isAdmin()">
@@ -25,7 +25,22 @@
                 <icon name="cash"></icon> Buy Ticket
             </nav-list>
         </router-link>
+        <router-link to="/dashboard/staffs" exact  v-if="loginUser && loginUser.isAdmin()">
+            <nav-list class="nav-item">
+                <icon name="account-circle"></icon> Staffs
+            </nav-list>
+        </router-link>
+        <router-link to="/dashboard/activate-tickets" exact  v-if="loginUser && loginUser.isStaff()">
+            <nav-list class="nav-item">
+                <icon name="ticket"></icon> Activate Tickets
+            </nav-list>
+        </router-link>
         <divider></divider>
+        <router-link to="/dashboard/my-account" exact>
+            <nav-list class="nav-item">
+                <icon name="account"></icon> My Account
+            </nav-list>
+        </router-link>
         <nav-list class="nav-item" @click="logOut">
             <icon name="key"></icon> Sign Out
         </nav-list>

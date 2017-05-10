@@ -10,6 +10,7 @@ export const Price = Class.create({
         station2Id: String,
         getFormattedPrice: {
             type: String,
+            optional: true,
             resolve (doc) {
                 return doc.value.toFixed(2);
             }

@@ -1,1 +1,25 @@
 @import "{devsignstudio:viu-ui}/import.scss";
+
+.status {
+    color: $color-white;
+    padding: 4px 8px;
+    font-size: 12px;
+    @include border-radius(2px);
+    &.status-unpaid {
+        background: $color-red;
+    }
+
+    &.status-paid {
+        background: $color-green;
+    }
+
+    &.status-used {
+        background: $color-grey-300;
+        color: $color-grey-900;
+    }
+
+    &.status-expired {
+        background: $color-amber-600;
+        color: $color-grey-900;
+    }
+}

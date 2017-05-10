@@ -37,7 +37,6 @@
                         </flat-button>
                     </router-link>
                 </div>
-    
             </div>
         </div>
     </register-login-wrapper>
@@ -101,7 +100,7 @@
                 if (this.user.password !== this.user.cpassword) {
                     return this.$snackbar.run("Please confirm your password with correct password", () => {}, "OK", "error");
                 }
-                
+
                 let user = new User();
                 let uObj = {username: this.user.username, password: this.user.password};
 

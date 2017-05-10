@@ -97,6 +97,11 @@
                     priceId: this.price._id,
                 }
 
+                let todayDate = new Date().beginningOfDay();
+                if (new Date(obj.year, obj.month, obj.day).beginningOfDay() < todayDate) {
+                    return this.$snackbar.run("Please input date today or after today", ()=> {}, "OK", "error");
+                }
+
                 t.callMethod("create", obj, (err, res)=> {
                     if (err) {
                         return this.$snackbar.run("Erro buying new ticket: "+ err.reason, ()=> {}, "OK", "error");
