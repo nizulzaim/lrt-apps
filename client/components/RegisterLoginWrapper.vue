@@ -1,11 +1,11 @@
 <template>
-    <div class="background-deep-purple" v-wheight="100" >
+    <div class="background-theme" v-wheight="100" >
         <div class="__background-wrap">
             <div class="__background"></div>
         </div>
-        <scroll-bar  style="padding-left: 24px; padding-right: 24px;">
+        <div  style="padding-left: 24px; padding-right: 24px;">
             <slot></slot>
-        </scroll-bar>
+        </div>
     
     </div>
 </template>

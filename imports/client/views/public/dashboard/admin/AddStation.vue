@@ -49,7 +49,9 @@
                     }
                     this.name = "";
                     this.prices = [];
-                    return this.$snackbar.run("Successfully created new station");
+                    this.$snackbar.run("Successfully created new station");
+
+                    return this.$router.replace("/dashboard/stations");
                 })
             }
         },

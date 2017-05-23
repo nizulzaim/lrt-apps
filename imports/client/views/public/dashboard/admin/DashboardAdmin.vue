@@ -9,7 +9,7 @@
                         </cards-content>
                         <cards-action class="background-theme-800 cards-content">
                             <div class="pull-right" >
-                                <router-link to="/dashboard/all-tickets"><raised-button class="background-theme-500 primary" v-ripple>Tickets</raised-button></router-link>
+                                <router-link to="/dashboard/tickets"><raised-button class="background-theme-500 primary" v-ripple>Tickets</raised-button></router-link>
                             </div>
                         </cards-action>
                     </cards>

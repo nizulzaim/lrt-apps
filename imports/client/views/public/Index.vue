@@ -8,7 +8,7 @@
 							<img class="img-responsive" src="/img/logo.png" alt="">
 						</div>
 						<cards-content>
-							<textfield placeholder="Username" v-model="user.username"></textfield>
+							<textfield placeholder="Username" v-model="user.username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textfield>
 							<textfield type="password" placeholder="Password" v-model="user.password"></textfield>
 						</cards-content>
 						<divider></divider>

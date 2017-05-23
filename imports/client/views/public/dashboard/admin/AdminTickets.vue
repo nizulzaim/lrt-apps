@@ -6,7 +6,7 @@
                     <span :class="'status status-'+ t.statusText()">{{t.statusText()}}</span>
                 </cards-content>
                 <divider></divider>
-                <cards-content>
+                <cards-content v-if="t.price()">
                     <div class="font-body no-margin" v-if="getFrom(t.from)">From: <span class="font-light">{{getFrom(t.from).name}}</span></div>
                     <div class="font-body no-margin" v-if="getTo(t.price().station1Id, t.price().station2Id, t.from)">To: <span class="font-light">{{getTo(t.price().station1Id, t.price().station2Id, t.from).name}}</span></div>
                     <div class="font-body no-margin">Total payment: <span class="font-light">RM {{t.totalPrice().toFixed(2)}}</span></div>
@@ -71,7 +71,7 @@
                 transactions: [],
             },
             transactions() {
-                return Transaction.find({}, {sort: {createdAt: -1}});
+                return Transaction.find({}, {sort: {ticketDate: -1}});
             },
         },
         computed: {

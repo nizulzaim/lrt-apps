@@ -10,19 +10,19 @@
                         <cards-content>
                             <div class="row has-gutter">
                                 <div class="col-md-fluid-12" style="border-right: 1px solid #eee">
-                                    <textfield placeholder="Username" v-model="user.username"></textfield>
+                                    <textfield placeholder="Username" v-model="user.username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textfield>
                                     <textfield type="password" placeholder="Password" v-model="user.password"></textfield>
                                     <textfield type="password" placeholder="Confirm Password" v-model="user.cpassword"></textfield>
                                     <textfield placeholder="Full Name" v-model="user.name"></textfield>
                                     <textfield placeholder="Phone Number" v-model="user.telNo"></textfield>
-                                    <textfield placeholder="Email" v-model="user.email"></textfield>
+                                    <textfield placeholder="Email" v-model="user.email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textfield>
                                 </div>
                             </div>
                         </cards-content>
                         <divider></divider>
                         <cards-action>
                             <div class="pull-right">
-                                <color-button v-ripple class="background-deep-purple" type="submit">
+                                <color-button v-ripple class="background-theme" type="submit">
                                     <icon name="account"></icon>Register
                                 </color-button>
                             </div>

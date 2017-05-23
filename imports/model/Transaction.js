@@ -30,7 +30,8 @@ export const Transaction = Class.create({
             removedFieldName: 'removed',
             hasRemovedAtField: true,
             removedAtFieldName: 'removedAt'
-        }
+        },
+        
     },
     helpers: {
         totalPrice() {
@@ -45,10 +46,17 @@ export const Transaction = Class.create({
             return Price.findOne(this.priceId);
         },
         statusText() {
+            if (this.status === 3 || this.isExpired()) return "expired";
             if (this.status === 0) return "unpaid";
             if (this.status === 1) return "paid";
             if (this.status === 2) return "used";
-            if (this.status === 3) return "expired";
+        },
+        isExpired() {
+            if ((this.status === 1 || this.status === 0) && Number(this.ticketDate) < Number(new Date())) {
+                return true;
+            }
+
+            return false;
         }
     }
 });
@@ -109,13 +117,19 @@ if (Meteor.isServer) {
         };
     });
 
-    Meteor.publishComposite('transactionsByStation', function(from, userId = "") {
+    Meteor.publishComposite('transactionsByStation', function(from, date, userId = "") {
         return {
             find: function() {
-                if (userId) {
-                    return Transaction.find({from, status: 1, userId, ticketDate: {$gte: new Date().beginningOfDay()}});
+                if (date) {
+                    date.setHours(0);
+                    date.setMinutes(0);
+                    date.setSeconds(0);
                 }
-                return Transaction.find({from, status: 1, ticketDate: {$gte: new Date().beginningOfDay()}});
+                if (userId) {
+                    let t = Transaction.find({from, status: 1, userId, ticketDate: {$gte: date}});
+                    return t;
+                }
+                return Transaction.find({from, status: 1, ticketDate: {$gte: date}});
             },children,
             
         };
